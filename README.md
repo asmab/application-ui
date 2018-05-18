@@ -1,9 +1,9 @@
 # reactjs-application
 
-ReactJS application with WebPack, hot-reloading and LESS.
+ReactJS application with WebPack.
+Triangle Resolver
 
-Patients management - CRUD
-Medicines search using patientSky API
+
 
 ## Getting Started
 ```sh
