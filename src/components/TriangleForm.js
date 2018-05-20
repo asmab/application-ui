@@ -11,7 +11,7 @@ const TriangleForm = Component =>
   }
   handleSubmit(e) {
      e.preventDefault()
-     console.log(JSON.stringify(this.state, null, 4))
+     this.state.result = this.triangleTypeSolver(this.state.form)
   }
 
   handleChange(e) {
@@ -21,8 +21,18 @@ const TriangleForm = Component =>
       ? target.checked 
       : target.value
       
-    this.setState(state => ({form: {...state.form, ...{[name] : value}}}))    
+    this.setState(state => ({form: {...state.form, ...{[name] : value}}})) 
   }
+
+  triangleTypeSolver(vals) {
+    if ((vals.sideA == vals.sideB) || (vals.sideB == vals.sideC) || (vals.sideA == vals.sideC)) {
+      if ((vals.sideA == vals.sideB) && (vals.sideA == vals.sideC) && (vals.sideB == vals.sideC))
+        return "equilateral";
+      return "isosceles";
+    }
+    return "scalene";
+  }
+
   render() {
     const { initialState, ...rest } = this.props
     const { form } = this.state
@@ -35,13 +45,13 @@ const TriangleForm = Component =>
 }
 
 const Form = ({state, handleSubmit, handleChange}) => 
-   (
+   (<div>
    <form data-ts="Form" onSubmit={handleSubmit}>
     <fieldset>
       <label>
         <span> Side A:</span>
           <input
-            type="text"
+            type="number"
             name="sideA"
             value={state.sideA}
             onChange={handleChange}
@@ -50,7 +60,7 @@ const Form = ({state, handleSubmit, handleChange}) =>
       <label>
         <span> Side B:</span>
           <input
-            type="text"
+            type="number"
             name="sideB"
             value={state.sideB}
             onChange={handleChange}
@@ -59,56 +69,18 @@ const Form = ({state, handleSubmit, handleChange}) =>
       <label>
         <span> Side C:</span>
           <input
-            type="text"
+            type="number"
             name="sideC"
             value={state.sideC}
             onChange={handleChange}
           />
       </label>
-       <button data-ts="Button" className="ts-primary">
+       <button data-ts="Button" className="ts-primary" type="submit">
            <span>Submit</span>
         </button>
     </fieldset>
-  </form>)
+</form>
+<h1> result : {state.result}</h1>
+</div>)
 
 export default TriangleForm(Form)
-
-
-// (
-// <form onSubmit={handleSubmit}>
-//         <label>
-//           Side A:
-//           <input
-//             type="text"
-//             name="sideA"
-//             value={state.sideA}
-//             onChange={handleChange}
-//           />
-//         </label>
-//         <br />
-//         <label>
-//           Side B:
-//           <input
-//             type="text"
-//             name="sideB"
-//             value={state.sideB}
-//             onChange={handleChange}
-//           />
-//         </label>
-//         <br />
-//         <label>
-//           Side C:
-//           <input
-//             type="text"
-//             name="sideC"
-//             value={state.sideC}
-//             onChange={handleChange}
-//           />
-//         </label>
-//         <br />
-//         <br />
-//         <button data-ts="Button" className="ts-primary">
-//           <span>Submit</span>
-//         </button>
-//       </form>
-// )

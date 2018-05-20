@@ -14,7 +14,7 @@ const Section = () => {
     return (
 
         <section className="jumbotron jumbotron-fluid white-bg">
-            <main ts-main>
+
             <p> test tradeshift ui components </p>
 
             <div className="triangleForm">
@@ -27,7 +27,6 @@ const Section = () => {
                     }}
                 />
             </div>
-            </main>
         </section>
     )
 }
