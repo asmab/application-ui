@@ -1,24 +1,39 @@
-.submit-button {
+.container {
+  display: table;
+  margin: 0 auto;
+}
+
+.main-content {
+  overflow-y: scroll;
+}
+
+form, .submit-button {
   float: right;
 }
-form {
-  float: right;
+
+.image-container{
+    display: table;
+    margin: 0 auto;
 }
 .ts-form .ts-field[type=number] {
     width: 250px;
 }
 .result-class {
-  color: red;
+  color: blue;
   margin-top: 15px;
   font-size: 20px;
 }
-.header-logo {
-  background-image: url(icon.png);
-  background-repeat: no-repeat;
-  background-size: auto 42px;
-  display: block;
-  height: 42px;
-  width: 99px;
+
+.image-container {
+  text-align: center;
+  .image-class {
+    height: 250px;
+    width: 250px;
+  }
 }
 
+.error-msg { color: red;}
 
+.App-logo {
+  height: 100px;
+}

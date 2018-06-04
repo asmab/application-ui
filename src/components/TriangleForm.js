@@ -5,63 +5,83 @@ const TriangleForm = Component =>
 
   constructor(props) {
     super(props)
-    this.state = { form: props.initialState, result: "" }
+    this.state = { 
+      form: props.initialState,
+      result: {image: require('../img/questionMark.png')},
+      error: '' }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.reset = this.reset.bind(this)
   }
+
+  // return type of triangle
+  triangleTypeSolver(vals) {
+    if ((vals.sideA == vals.sideB) || (vals.sideB == vals.sideC) || (vals.sideA == vals.sideC)) {
+      if (vals.sideA == vals.sideB && vals.sideB == vals.sideC)
+        return {type: "equilateral" ,image: require('../img/equilateral.svg') }
+      return {type: "isosceles" ,image: require('../img/isocele.png') }
+    }
+    return {type: "scalene" ,image: require('../img/scalene.png') }
+  }
+
+  // submit form 
   handleSubmit(e) {
      e.preventDefault()
-     const result = this.triangleTypeSolver(this.state.form)
-     this.setState({ result })
+
+     // submit the form and display triangle type when the form isValid
+     if (this.isValid(this.state.form)) {
+        const result = this.triangleTypeSolver(this.state.form)
+        this.setState({ result })
+     } else {
+        //show an error notification when : empty input or null value
+        ts.ui.Notification.error('Error : all inputs are required and values not null ')
+     }
+  }
+
+  isValid(inputs) {
+    //check if all inputs are filled with a value > 0
+    if (inputs.sideA === '' || inputs.sideB === '' || inputs.sideC === '') return false
+    else if ( Number(inputs.sideA) === 0 || Number(inputs.sideB) === 0 || Number(inputs.sideC) === 0) return false
+    else if ( Number(inputs.sideA) < 0 || Number(inputs.sideB) < 0 || Number(inputs.sideC) < 0) return false
+    else return true
+  }
+
+  handleError(value) {
+    if (Number(value) === 0) return value + ':' + 'Value should be different to zero'
+    else if (Number(value) < 0) return value + ':' +'Value should be positive'
+    else return ''
   }
 
   handleChange(e) {
     const target = e.target
     const name = target.name
-    const value = target.value      
+    const value = target.value
+
+    if (value === '') {
+      this.setState({ error : ''})
+    } else {
+      //show an error message if the input value = 0 or value < 0
+      const errorMsg = this.handleError(value)
+      this.setState({ error: errorMsg })
+    }
     this.setState(state => ({form: {...state.form, ...{[name] : value}}})) 
   }
-
-  reset(e) {
-    e.persist()
-    ts.ui.Dialog.confirm('Are you sure?', {
-      onaccept: function() { 
-        
-        ts.ui.Notification.success('Values cleared')
-      },
-      oncancel: function() {
-        ts.ui.Notification.success('Finish the test')
-      }
-    })
-  }
-
-  triangleTypeSolver(vals) {
-    if ((vals.sideA == vals.sideB) || (vals.sideB == vals.sideC) || (vals.sideA == vals.sideC)) {
-      if (vals.sideA == vals.sideB && vals.sideB == vals.sideC)
-        return "equilateral"
-      return "isosceles"
-    }
-    return "scalene"
-  }
-
+  
   render() {
     const { initialState, ...rest } = this.props
-    const { form, result  } = this.state
+    const { form, result, error } = this.state
     return React.createElement(Form, {
-      state: { ...form, result },
+      state: { ...form, result, error },
       handleSubmit: this.handleSubmit,
-      handleChange: this.handleChange,
-      reset: this.reset
+      handleChange: this.handleChange
     })
   }
 }
 
-const Form = ({state, handleSubmit, handleChange, reset}) => 
+const Form = ({state, handleSubmit, handleChange, showTriangleImg}) => 
    (<div className="container">
         <div className="row">
             <div className="col">
-                <form data-ts="Form" onSubmit={handleSubmit}>
+                <form data-ts="Form" onSubmit={handleSubmit} id="triangleForm">
                   <fieldset>
                     <label>
                       <span> Side A:</span>
@@ -90,18 +110,23 @@ const Form = ({state, handleSubmit, handleChange, reset}) =>
                           onChange={handleChange}
                         />
                     </label>
-                    <button data-ts="Button" className="ts-primary submit-button" type="button" onClick={reset}>
-                        <span>Clear</span>
-                    </button>
-                    <button data-ts="Button" className="ts-primary submit-button" type="submit">
+                    <dl className="ts-info">
+                      <dt>Info</dt>
+                      <dd>The length of side A,B and C</dd>
+                    </dl>
+                    <p className="error-msg"> { state.error } </p>
+                    <button className="ts-primary submit-button" data-ts="Button" type="submit">
                         <span>Submit</span>
                     </button>
                   </fieldset>
               </form>
             </div>
             <div className="col">
-              Triangle type :
-              <p className="result-class"> { state.result } </p>
+              <div className="image-container">
+                Triangle type :
+                <p className="result-class"> { state.result.type } </p>
+                <img className="image-class" src={state.result.image}/>
+              </div>
             </div>
         </div>
     </div>
