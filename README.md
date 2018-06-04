@@ -23,15 +23,7 @@ Open [http://localhost:3000](http://localhost:3000)<br>
 * ReactJs
 * Webpack
 * Less
-* axios
-* Redux
 * React Router 4
 * Bootstrap 4
-* redux-form
-* React Boostrap Table
-* Babel
-* Mock API Data: hand rolled
-* toastr
-* jquery (needed by toastr and bootstrap 4)
 * lodash
 * Font Awesome
